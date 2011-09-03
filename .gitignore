@@ -2,8 +2,5 @@ Hyves.Desktop.Api/bin/
 Hyves.Desktop.Api/obj/
 Hyves.Desktop.SharedItems/bin/
 Hyves.Desktop.SharedItems/obj/
-Jenna.Interface/Jenna.Interface/bin/
-Jenna.Interface/Jenna.Interface/Obj/
-Jenna.Interface/Jenna.InterfaceContent/bin/
-Jenna.Interface/Jenna.InterfaceContent/Obj/
-Jenna.Interface/Jenna.Interface/app.config
+Jenna.Interface/bin/
+Jenna.Interface/Obj/
