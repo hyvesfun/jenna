@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Hyves.Api;
+using Hyves.Api.Model;
 
 namespace Jenna.Interface
 {
@@ -23,6 +25,14 @@ namespace Jenna.Interface
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            HyvesApplication hyvesApplication = HyvesApplication.GetInstance();
+            hyvesApplication.LoginIn("", "", new HyvesServicesCallback<bool>(LoginCallback));
+        }
+
+        private void LoginCallback(ServiceResult<bool> serviceResult)
+        {
+            HyvesApplication hyvesApplication = HyvesApplication.GetInstance();
         }
 
         /// <summary>

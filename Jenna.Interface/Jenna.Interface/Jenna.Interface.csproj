@@ -116,6 +116,10 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Hyves.Desktop.Api\Hyves.Api.csproj">
+      <Project>{3CDC049E-88CC-4096-AB96-2DE466FA378D}</Project>
+      <Name>Hyves.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Jenna.InterfaceContent\Jenna.InterfaceContent.contentproj">
       <Name>Jenna.InterfaceContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>
