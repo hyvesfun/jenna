@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3CDC049E-88CC-4096-AB96-2DE466FA378D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Hyves.Api</RootNamespace>
+    <AssemblyName>Hyves.Desktop.Api</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <Reference Include="Emgu.CV">
+      <HintPath>..\Hyves.Desktop.SharedItems\Emgu.CV.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.Util">
+      <HintPath>..\Hyves.Desktop.SharedItems\Emgu.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Net35">
+      <HintPath>..\Hyves.Desktop.SharedItems\Newtonsoft.Json.Net35.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EnumHelper.cs" />
+    <Compile Include="HyvesApplication.cs" />
+    <Compile Include="LoginNoPopup.cs" />
+    <Compile Include="Model\HyvesMethod.cs" />
+    <Compile Include="Model\Media.cs" />
+    <Compile Include="Model\MediaSpottedRectangle.cs" />
+    <Compile Include="Model\MediaToken.cs" />
+    <Compile Include="Model\MediaTokenStatus.cs" />
+    <Compile Include="Model\RequestResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\ServiceResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Model\User.cs" />
+    <Compile Include="Model\Visibility.cs" />
+    <Compile Include="Service\CustomService.cs" />
+    <Compile Include="Service\HyvesBatchUploadRequest.cs" />
+    <Compile Include="Service\HyvesRequestFactory.cs" />
+    <Compile Include="Service\HyvesUploadRequest.cs" />
+    <Compile Include="Service\HyvesRequest.cs" />
+    <Compile Include="LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoginForm.Designer.cs">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\AccessToken.cs" />
+    <Compile Include="Model\Album.cs" />
+    <Compile Include="Model\InfoResponse.cs" />
+    <Compile Include="Model\RequestToken.cs" />
+    <Compile Include="OAuthBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\AuthService.cs" />
+    <Compile Include="Service\MediaService.cs" />
+    <Compile Include="Service\Request.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Service\Service.cs" />
+    <Compile Include="Service\UserService.cs" />
+    <Compile Include="Util.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="LoginForm.resx">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Hyves.Desktop.SharedItems\Hyves.Desktop.SharedItems.csproj">
+      <Project>{516054C1-0D20-4B7A-AE4D-4E1157259A23}</Project>
+      <Name>Hyves.Desktop.SharedItems</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
