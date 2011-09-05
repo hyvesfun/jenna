@@ -331,7 +331,6 @@ namespace ShapeGame_Utils
 
     public class FallingThings
     {
-        private static Dictionary<string, BitmapImage> brushes = new Dictionary<string, BitmapImage>();
 
         struct PolyDef
         {
@@ -394,6 +393,16 @@ namespace ShapeGame_Utils
             // Hit testing between this thing and a single segment.  If hit, the center point on
             // the segment being hit is returned, along with the spot on the line from 0 to 1 if
             // a line segment was hit.
+
+            public Thing()
+            {
+                if (MainWindow.friendList.Count > 0)
+                {
+                    Random r = new Random();
+                    int random = r.Next(0, MainWindow.friendList.Count - 1);
+                    this.friend = MainWindow.friendList[random];
+                }
+            }
 
             public bool Hit(Segment seg, ref Point ptHitCenter, ref double lineHitLocation)
             {
@@ -508,6 +517,8 @@ namespace ShapeGame_Utils
                 center.X = fX0;
                 center.Y = fY0;
             }
+
+            public bool HasFriend { get { return friend != null; } }
         }
 
         private List<Thing> things = new List<Thing>();
@@ -952,26 +963,12 @@ namespace ShapeGame_Utils
                                                                      (byte)(255 - (255 - thing.color.B) * factor)));
                     thing.brushPulse = new SolidColorBrush(Color.FromRgb(255, 255, 255));
 
-                    
-                    if (MainWindow.friendList.Count > 0)
+
+                    if (thing.HasFriend)
                     {
-
-
-                    if (thing.friend == null) {
-                        int random = r.Next(0, MainWindow.friendList.Count - 1);
-                        User friend = MainWindow.friendList[random];
-                        thing.friend = friend;
-                    }
-
-                    if (!brushes.ContainsKey(thing.friend.userid)) { 
-                        brushes.Add(thing.friend.userid,  new BitmapImage(new Uri(thing.friend.profilepicture.icon_medium.src, UriKind.Absolute)));
-                    }
-
-                    ImageBrush berriesBrush = new ImageBrush();
-                    berriesBrush.ImageSource =  brushes[thing.friend.userid];
-
-                    thing.brush = berriesBrush;
-
+                        ImageBrush berriesBrush = new ImageBrush();
+                        berriesBrush.ImageSource = new BitmapImage(new Uri(thing.friend.profilepicture.icon_medium.src, UriKind.Absolute));
+                        thing.brush = berriesBrush;
                     }
                 }
 
