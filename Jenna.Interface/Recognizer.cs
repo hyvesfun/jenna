@@ -42,14 +42,6 @@ namespace Jenna.Interface
         public enum Verbs
         {
             None = 0,
-            Bigger,
-            Biggest,
-            Smaller,
-            Smallest,
-            More,
-            Fewer,
-            Faster,
-            Slower,
             Colorize,
             RandomColors,
             DoShapes,
@@ -76,6 +68,7 @@ namespace Jenna.Interface
             {"Picture", new WhatSaid()        {verb=Verbs.Picture}},
             {"Take Photo", new WhatSaid()        {verb=Verbs.Picture}},
             {"Photo", new WhatSaid()        {verb=Verbs.Picture}},
+            {"Take Picture", new WhatSaid()        {verb=Verbs.Picture}},
 
         };
 
@@ -93,6 +86,7 @@ namespace Jenna.Interface
         {
             {"Reset", new WhatSaid()            {verb=Verbs.Reset}},
             {"Clear", new WhatSaid()            {verb=Verbs.Reset}},
+            {"Fuck", new WhatSaid()             {verb=Verbs.Reset}},
             {"Stop", new WhatSaid()             {verb=Verbs.Pause}},
             {"Pause Game", new WhatSaid()       {verb=Verbs.Pause}},
             {"Freeze", new WhatSaid()           {verb=Verbs.Pause}},
