@@ -109,6 +109,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="background.jpeg" />
     <Content Include="Hit-2.wav" />
     <Content Include="Pop-5.wav" />
     <Content Include="Squeeze.wav" />

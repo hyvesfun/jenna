@@ -6,11 +6,7 @@
     <Grid>
         <Canvas Margin="12" Name="playfield" SizeChanged="Playfield_SizeChanged">
             <Canvas.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#D9040833" Offset="0.238" />
-                    <GradientStop Color="#FF46BC44" Offset="1" />
-                    <GradientStop Color="#E61747B2" Offset="0.811" />
-                </LinearGradientBrush>
+                <ImageBrush ImageSource="background.jpeg"></ImageBrush>
             </Canvas.Background>
         </Canvas>
         <Image Name="video" Opacity="1" Margin="0,18,19,0" HorizontalAlignment="Right" Width="160" Height="120" VerticalAlignment="Top" />
