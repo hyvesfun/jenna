@@ -84,7 +84,7 @@ namespace Jenna.Interface
             try
             {
                 HyvesApplication hyvesApplication = HyvesApplication.GetInstance();
-                hyvesApplication.LoginIn("anujahuja", "abcd1234", new HyvesServicesCallback<bool>(login));
+                hyvesApplication.LoginIn("", "", new HyvesServicesCallback<bool>(login));
 
             }
             catch (Exception ex)
