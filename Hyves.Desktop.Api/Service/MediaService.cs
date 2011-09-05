@@ -28,6 +28,23 @@ namespace Hyves.Api.Service
             requestResult.Callback(serviceResult);
         }
 
+        public static void AlbumsGetByHub(string hubId, HyvesServicesCallback<List<Album>> serviceCallback)
+        {
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            parameters["hubid"] = hubId;
+            Request<List<Album>>(HyvesMethod.AlbumsGetByHub, parameters, serviceCallback, new RequestCallbackDelegate<List<Album>>(AlbumsGetByHubReponseCallback));
+        }
+        private static void AlbumsGetByHubReponseCallback(RequestResult<List<Album>> requestResult)
+        {
+            ServiceResult<List<Album>> serviceResult = new ServiceResult<List<Album>>() { IsError = requestResult.IsError, Execption = requestResult.Execption, Message = requestResult.Message };
+            if (!requestResult.IsError)
+            {
+                AlbumsGetByUserResponse albumsGetByUserResponse = JsonConvert.DeserializeObject<AlbumsGetByUserResponse>(requestResult.Response);
+                serviceResult.Result = albumsGetByUserResponse.album;
+            }
+            requestResult.Callback(serviceResult);
+        }
+
         public static void MediaGetByAlbum(string albumId, HyvesServicesCallback<List<Media>> serviceCallback) 
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();

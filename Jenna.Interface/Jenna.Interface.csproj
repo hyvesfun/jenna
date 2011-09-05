@@ -112,6 +112,7 @@
   <ItemGroup>
     <Resource Include="background.jpeg" />
     <Content Include="Hit-2.wav" />
+    <Resource Include="Jenna.jpg" />
     <Content Include="Pop-5.wav" />
     <Content Include="Squeeze.wav" />
   </ItemGroup>
