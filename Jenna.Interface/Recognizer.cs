@@ -42,9 +42,6 @@ namespace Jenna.Interface
         public enum Verbs
         {
             None = 0,
-            Colorize,
-            DoShapes,
-            ShapesAndColors,
             Reset,
             Pause,
             Resume,
@@ -218,17 +215,7 @@ namespace Jenna.Interface
                     if (e.Result.Text.Contains(phrase.Key))
                     {
                         said.Verb = phrase.Value.verb;
-                        said.Shape = phrase.Value.shape;
-                        if ((said.Verb == Verbs.DoShapes) && (foundColor))
-                        {
-                            said.Verb = Verbs.ShapesAndColors;
-                            said.Matched += " " + phrase.Key;
-                        }
-                        else
-                        {
-                            said.Matched = phrase.Key;
-                            said.RGBColor = phrase.Value.color;
-                        }
+                        said.Matched = phrase.Key;
                         found = true;
                         break;
                     }
