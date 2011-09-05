@@ -34,9 +34,8 @@ using System.Windows.Threading;
 using Microsoft.Research.Kinect.Audio;
 using Microsoft.Speech.AudioFormat;
 using Microsoft.Speech.Recognition;
-using ShapeGame_Utils;
 
-namespace ShapeGame_Speech
+namespace Jenna.Interface
 {
     public class Recognizer
     {
