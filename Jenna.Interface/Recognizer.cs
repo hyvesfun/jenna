@@ -42,18 +42,6 @@ namespace Jenna.Interface
         public enum Verbs
         {
             None = 0,
-            Bigger,
-            Biggest,
-            Smaller,
-            Smallest,
-            More,
-            Fewer,
-            Faster,
-            Slower,
-            Colorize,
-            RandomColors,
-            DoShapes,
-            ShapesAndColors,
             Reset,
             Pause,
             Resume,
@@ -76,23 +64,15 @@ namespace Jenna.Interface
             {"Picture", new WhatSaid()        {verb=Verbs.Picture}},
             {"Take Photo", new WhatSaid()        {verb=Verbs.Picture}},
             {"Photo", new WhatSaid()        {verb=Verbs.Picture}},
+            {"Take Picture", new WhatSaid()        {verb=Verbs.Picture}},
 
-        };
-
-        Dictionary<string, WhatSaid> ShapePhrases = new Dictionary<string, WhatSaid>()
-        {
-            {"All Friends", new WhatSaid()          {verb=Verbs.DoShapes, shape=PolyType.Circle}},
-        };
-
-        Dictionary<string, WhatSaid> ColorPhrases = new Dictionary<string, WhatSaid>()
-        {
-            {"Recent Friends", new WhatSaid()      {verb=Verbs.RandomColors}},
         };
 
         Dictionary<string, WhatSaid> SinglePhrases = new Dictionary<string, WhatSaid>()
         {
             {"Reset", new WhatSaid()            {verb=Verbs.Reset}},
             {"Clear", new WhatSaid()            {verb=Verbs.Reset}},
+            {"Fuck", new WhatSaid()             {verb=Verbs.Reset}},
             {"Stop", new WhatSaid()             {verb=Verbs.Pause}},
             {"Pause Game", new WhatSaid()       {verb=Verbs.Pause}},
             {"Freeze", new WhatSaid()           {verb=Verbs.Pause}},
@@ -138,23 +118,8 @@ namespace Jenna.Interface
             foreach (var phrase in GameplayPhrases)
                 gameplay.Add(phrase.Key);
 
-            var shapes = new Choices();
-            foreach (var phrase in ShapePhrases)
-                shapes.Add(phrase.Key);
-
-            var colors = new Choices();
-            foreach (var phrase in ColorPhrases)
-                colors.Add(phrase.Key);
-
-            var coloredShapeGrammar = new GrammarBuilder();
-            coloredShapeGrammar.Append(colors);
-            coloredShapeGrammar.Append(shapes);
-
             var objectChoices = new Choices();
             objectChoices.Add(gameplay);
-            objectChoices.Add(shapes);
-            objectChoices.Add(colors);
-            objectChoices.Add(coloredShapeGrammar);
 
             var actionGrammar = new GrammarBuilder();
             actionGrammar.AppendWildcard();
@@ -237,18 +202,10 @@ namespace Jenna.Interface
 
             // First check for color, in case both color _and_ shape were both spoken
             bool foundColor = false;
-            foreach (var phrase in ColorPhrases)
-                if (e.Result.Text.Contains(phrase.Key) && (phrase.Value.verb == Verbs.Colorize))
-                {
-                    said.RGBColor = phrase.Value.color;
-                    said.Matched = phrase.Key;
-                    foundColor = true;
-                    break;
-                }
             
             // Look for a match in the order of the lists below, first match wins.
             List<Dictionary<string, WhatSaid>> allDicts = new List<Dictionary<string, WhatSaid>>()
-                { GameplayPhrases, ShapePhrases, ColorPhrases, SinglePhrases };
+                { GameplayPhrases, SinglePhrases };
 
             bool found = false;
             for (int i = 0; i < allDicts.Count && !found; ++i)
@@ -258,17 +215,7 @@ namespace Jenna.Interface
                     if (e.Result.Text.Contains(phrase.Key))
                     {
                         said.Verb = phrase.Value.verb;
-                        said.Shape = phrase.Value.shape;
-                        if ((said.Verb == Verbs.DoShapes) && (foundColor))
-                        {
-                            said.Verb = Verbs.ShapesAndColors;
-                            said.Matched += " " + phrase.Key;
-                        }
-                        else
-                        {
-                            said.Matched = phrase.Key;
-                            said.RGBColor = phrase.Value.color;
-                        }
+                        said.Matched = phrase.Key;
                         found = true;
                         break;
                     }
