@@ -2,7 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Shape Game" Height="688" Width="619" FontStyle="Italic"
-        Loaded="Window_Loaded" Closed="Window_Closed" Closing="Window_Closing">
+        Loaded="Window_Loaded" Closed="Window_Closed" Closing="Window_Closing"
+        WindowStyle="None"
+        WindowState="Maximized">
     <Grid>
         <Canvas Margin="12" Name="playfield" SizeChanged="Playfield_SizeChanged">
             <Canvas.Background>
