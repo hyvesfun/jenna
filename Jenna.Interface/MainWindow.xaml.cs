@@ -99,13 +99,24 @@ namespace Jenna.Interface
 
             HyvesApplication hyvesApplication = HyvesApplication.GetInstance();
             UserService.UsersGetByFriendsLastLogin(hyvesApplication.UserId, new HyvesServicesCallback<List<User>>(friends));
-            MediaService.AlbumsGetByUser(hyvesApplication.UserId, new HyvesServicesCallback<List<Album>>(albums));
+            HubService.HubGetByShortname("hyveshq", new HyvesServicesCallback<List<Hub>>(hubs));
+
+            
+            
+
         }
 
         public void albums(ServiceResult<List<Album>> result) 
         {
             albumList = result.Result;
         }
+
+        public void hubs(ServiceResult<List<Hub>> result)
+        {
+            HyvesApplication hyvesApplication = HyvesApplication.GetInstance();
+            MediaService.AlbumsGetByHub(result.Result[0].hubid, new HyvesServicesCallback<List<Album>>(albums));
+        }
+
         public void friends(ServiceResult<List<User>> result) 
         {
             if (!result.IsError)
@@ -593,59 +604,6 @@ namespace Jenna.Interface
                     fallingThings.SetShapesColor(Color.FromRgb(0, 0, 0), true);
                     fallingThings.Reset();
                     break;
-                case Recognizer.Verbs.DoShapes:
-                    fallingThings.SetPolies(e.Shape);
-                    break;
-                case Recognizer.Verbs.RandomColors:
-                    fallingThings.SetShapesColor(Color.FromRgb(0, 0, 0), true);
-                    break;
-                case Recognizer.Verbs.Colorize:
-                    fallingThings.SetShapesColor(e.RGBColor, false);
-                    break;
-                case Recognizer.Verbs.ShapesAndColors:
-                    fallingThings.SetPolies(e.Shape);
-                    fallingThings.SetShapesColor(e.RGBColor, false);
-                    break;
-                case Recognizer.Verbs.More:
-                    dropRate *= 1.5;
-                    fallingThings.SetDropRate(dropRate);
-                    break;
-                case Recognizer.Verbs.Fewer:
-                    dropRate /= 1.5;
-                    fallingThings.SetDropRate(dropRate);
-                    break;
-                case Recognizer.Verbs.Bigger:
-                    dropSize *= 1.5;
-                    if (dropSize > MaxShapeSize)
-                        dropSize = MaxShapeSize;
-                    fallingThings.SetSize(dropSize);
-                    break;
-                case Recognizer.Verbs.Biggest:
-                    dropSize = MaxShapeSize;
-                    fallingThings.SetSize(dropSize);
-                    break;
-                case Recognizer.Verbs.Smaller:
-                    dropSize /= 1.5;
-                    if (dropSize < MinShapeSize)
-                        dropSize = MinShapeSize;
-                    fallingThings.SetSize(dropSize);
-                    break;
-                case Recognizer.Verbs.Smallest:
-                    dropSize = MinShapeSize;
-                    fallingThings.SetSize(dropSize);
-                    break;
-                case Recognizer.Verbs.Faster:
-                    dropGravity *= 1.25;
-                    if (dropGravity > 4.0)
-                        dropGravity = 4.0;
-                    fallingThings.SetGravity(dropGravity);
-                    break;
-                case Recognizer.Verbs.Slower:
-                    dropGravity /= 1.25;
-                    if (dropGravity < 0.25)
-                        dropGravity = 0.25;
-                    fallingThings.SetGravity(dropGravity);
-                    break;
                 case Recognizer.Verbs.Up:
                     try
                     {
@@ -690,11 +648,16 @@ namespace Jenna.Interface
                 encoder.Save(fileStream);
             }
 
-            foreach(Album album in albumList){
-                if(album.title.ToLower() == "kinect"){
-                    List<String> files = new List<string>();
-                    files.Add(filePath);
-                    MediaService.UploadFiles(files, album, new HyvesServicesCallback<HyvesBatchUploadRequest>(HyvesBatchUploadCallback));
+            if (albumList != null)
+            {
+                foreach (Album album in albumList)
+                {
+                    if (album.title.ToLower() == "kinect")
+                    {
+                        List<String> files = new List<string>();
+                        files.Add(filePath);
+                        MediaService.UploadFiles(files, album, new HyvesServicesCallback<HyvesBatchUploadRequest>(HyvesBatchUploadCallback));
+                    }
                 }
             }
         }

@@ -64,6 +64,7 @@
     <Compile Include="EnumHelper.cs" />
     <Compile Include="HyvesApplication.cs" />
     <Compile Include="LoginNoPopup.cs" />
+    <Compile Include="Model\Hub.cs" />
     <Compile Include="Model\HyvesMethod.cs" />
     <Compile Include="Model\Media.cs" />
     <Compile Include="Model\MediaSpottedRectangle.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\Visibility.cs" />
     <Compile Include="Service\CustomService.cs" />
+    <Compile Include="Service\HubService.cs" />
     <Compile Include="Service\HyvesBatchUploadRequest.cs" />
     <Compile Include="Service\HyvesRequestFactory.cs" />
     <Compile Include="Service\HyvesUploadRequest.cs" />
