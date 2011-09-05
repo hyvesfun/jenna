@@ -57,7 +57,10 @@ namespace ShapeGame_Speech
             ShapesAndColors,
             Reset,
             Pause,
-            Resume
+            Resume,
+            Up,
+            Down,
+            Picture
         };
 
         struct WhatSaid
@@ -69,67 +72,26 @@ namespace ShapeGame_Speech
 
         Dictionary<string, WhatSaid> GameplayPhrases = new Dictionary<string, WhatSaid>()
         {
-            {"Faster", new WhatSaid()       {verb=Verbs.Faster}},
-            {"Slower", new WhatSaid()       {verb=Verbs.Slower}},
-            {"Bigger Shapes", new WhatSaid() {verb=Verbs.Bigger}},
-            {"Bigger", new WhatSaid()       {verb=Verbs.Bigger}},
-            {"Larger", new WhatSaid()       {verb=Verbs.Bigger}},
-            {"Huge", new WhatSaid()         {verb=Verbs.Biggest}},
-            {"Giant", new WhatSaid()        {verb=Verbs.Biggest}},
-            {"Biggest", new WhatSaid()      {verb=Verbs.Biggest}},
-            {"Super Big", new WhatSaid()    {verb=Verbs.Biggest}},
-            {"Smaller", new WhatSaid()      {verb=Verbs.Smaller}},
-            {"Tiny", new WhatSaid()         {verb=Verbs.Smallest}},
-            {"Super Small", new WhatSaid()  {verb=Verbs.Smallest}},
-            {"Smallest", new WhatSaid()     {verb=Verbs.Smallest}},
-            {"More Shapes", new WhatSaid()  {verb=Verbs.More}},
-            {"More", new WhatSaid()         {verb=Verbs.More}},
-            {"Less", new WhatSaid()         {verb=Verbs.Fewer}},
-            {"Fewer", new WhatSaid()        {verb=Verbs.Fewer}},
+            {"Move Up", new WhatSaid()        {verb=Verbs.Up}},
+            {"Move Down", new WhatSaid()        {verb=Verbs.Down}},
+            {"Picture", new WhatSaid()        {verb=Verbs.Picture}},
+            {"Take Photo", new WhatSaid()        {verb=Verbs.Picture}},
+            {"Photo", new WhatSaid()        {verb=Verbs.Picture}},
+
         };
 
         Dictionary<string, WhatSaid> ShapePhrases = new Dictionary<string, WhatSaid>()
         {
-            {"7 Pointed Stars", new WhatSaid()  {verb=Verbs.DoShapes, shape=PolyType.Star7}},
-            {"Triangles", new WhatSaid()        {verb=Verbs.DoShapes, shape=PolyType.Triangle}},
-            {"Squares", new WhatSaid()          {verb=Verbs.DoShapes, shape=PolyType.Square}},
-            {"Boxes", new WhatSaid()            {verb=Verbs.DoShapes, shape=PolyType.Square}},
-            {"Hexagons", new WhatSaid()         {verb=Verbs.DoShapes, shape=PolyType.Hex}},
-            {"Pentagons", new WhatSaid()        {verb=Verbs.DoShapes, shape=PolyType.Pentagon}},
-            {"Stars", new WhatSaid()            {verb=Verbs.DoShapes, shape=PolyType.Star}},
-            {"Circles", new WhatSaid()          {verb=Verbs.DoShapes, shape=PolyType.Circle}},
-            {"Balls", new WhatSaid()            {verb=Verbs.DoShapes, shape=PolyType.Circle}},
-            {"Bubbles", new WhatSaid()          {verb=Verbs.DoShapes, shape=PolyType.Bubble}},
-            {"All Shapes", new WhatSaid()       {verb=Verbs.DoShapes, shape=PolyType.All}},
-            {"Everything", new WhatSaid()       {verb=Verbs.DoShapes, shape=PolyType.All}},
-            {"Shapes", new WhatSaid()           {verb=Verbs.DoShapes, shape=PolyType.All}},
+            {"All Friends", new WhatSaid()          {verb=Verbs.DoShapes, shape=PolyType.Circle}},
         };
 
         Dictionary<string, WhatSaid> ColorPhrases = new Dictionary<string, WhatSaid>()
         {
-            {"Every Color", new WhatSaid()      {verb=Verbs.RandomColors}},
-            {"All Colors", new WhatSaid()       {verb=Verbs.RandomColors}},
-            {"Random Colors", new WhatSaid()    {verb=Verbs.RandomColors}},
-            {"Red", new WhatSaid()              {verb=Verbs.Colorize, color = Color.FromRgb(240,60,60)}},
-            {"Green", new WhatSaid()            {verb=Verbs.Colorize, color = Color.FromRgb(60,240,60)}},
-            {"Blue", new WhatSaid()             {verb=Verbs.Colorize, color = Color.FromRgb(60,60,240)}},
-            {"Yellow", new WhatSaid()           {verb=Verbs.Colorize, color = Color.FromRgb(240,240,60)}},
-            {"Orange", new WhatSaid()           {verb=Verbs.Colorize, color = Color.FromRgb(255,110,20)}},
-            {"Purple", new WhatSaid()           {verb=Verbs.Colorize, color = Color.FromRgb(70,30,255)}},
-            {"Violet", new WhatSaid()           {verb=Verbs.Colorize, color = Color.FromRgb(160,30,245)}},
-            {"Pink", new WhatSaid()             {verb=Verbs.Colorize, color = Color.FromRgb(255,128,225)}},
-            {"Gray", new WhatSaid()             {verb=Verbs.Colorize, color = Color.FromRgb(192,192,192)}},
-            {"Brown", new WhatSaid()            {verb=Verbs.Colorize, color = Color.FromRgb(130,80,50)}},
-            {"Dark", new WhatSaid()             {verb=Verbs.Colorize, color = Color.FromRgb(40,40,40)}},
-            {"Black", new WhatSaid()            {verb=Verbs.Colorize, color = Color.FromRgb(5,5,5)}},
-            {"Bright", new WhatSaid()           {verb=Verbs.Colorize, color = Color.FromRgb(240,240,240)}},
-            {"White", new WhatSaid()            {verb=Verbs.Colorize, color = Color.FromRgb(255,255,255)}},
+            {"Recent Friends", new WhatSaid()      {verb=Verbs.RandomColors}},
         };
 
         Dictionary<string, WhatSaid> SinglePhrases = new Dictionary<string, WhatSaid>()
         {
-            {"Speed Up", new WhatSaid()         {verb=Verbs.Faster}},
-            {"Slow Down", new WhatSaid()        {verb=Verbs.Slower}},
             {"Reset", new WhatSaid()            {verb=Verbs.Reset}},
             {"Clear", new WhatSaid()            {verb=Verbs.Reset}},
             {"Stop", new WhatSaid()             {verb=Verbs.Pause}},

@@ -18,6 +18,9 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Microsoft.Research.Kinect.Nui;
+using System.Windows.Media.Imaging;
+using Jenna.Interface;
+using Hyves.Api.Model;
 
 /// <summary>
 /// Falling shapes, and intersection hit testing with body segments
@@ -97,7 +100,7 @@ namespace ShapeGame_Utils
         {
             segLast = seg;
             seg = s;
-            
+
             DateTime cur = DateTime.Now;
             double fMs = cur.Subtract(timeLastUpdated).TotalMilliseconds;
             if (fMs < 10.0)
@@ -143,16 +146,16 @@ namespace ShapeGame_Utils
 
     public enum PolyType
     {
-        None        = 0x00,
-        Triangle    = 0x01,
-        Square      = 0x02,
-        Star        = 0x04,
-        Pentagon    = 0x08,
-        Hex         = 0x10,
-        Star7       = 0x20,
-        Circle      = 0x40,
-        Bubble      = 0x80,
-        All         = 0x7f
+        None = 0x00,
+        Triangle = 0x01,
+        Square = 0x02,
+        Star = 0x04,
+        Pentagon = 0x08,
+        Hex = 0x10,
+        Star7 = 0x20,
+        Circle = 0x40,
+        Bubble = 0x80,
+        All = 0x7f
     }
 
     public enum HitType
@@ -211,7 +214,7 @@ namespace ShapeGame_Utils
                 else
                     label.FontSize = Math.Min(Math.Max(10, boundsRect.Width * 2 / text.Length),
                                               Math.Max(10, boundsRect.Height / 20));
-                label.VerticalContentAlignment= VerticalAlignment.Bottom;
+                label.VerticalContentAlignment = VerticalAlignment.Bottom;
                 label.HorizontalContentAlignment = (doScroll) ? HorizontalAlignment.Left : HorizontalAlignment.Center;
                 label.SetValue(Canvas.LeftProperty, offset * boundsRect.Width);
             }
@@ -328,6 +331,8 @@ namespace ShapeGame_Utils
 
     public class FallingThings
     {
+        private static Dictionary<string, BitmapImage> brushes = new Dictionary<string, BitmapImage>();
+
         struct PolyDef
         {
             public int numSides;
@@ -364,7 +369,7 @@ namespace ShapeGame_Utils
         // The Thing struct represents a single object that is flying through the air, and
         // all of its properties.
 
-        private struct Thing
+        private class Thing
         {
             public Point center;
             public double size;
@@ -384,6 +389,7 @@ namespace ShapeGame_Utils
             public int touchedBy;               // Last player to touch this thing
             public int hotness;                 // Score level
             public int flashCount;
+            public User friend;
 
             // Hit testing between this thing and a single segment.  If hit, the center point on
             // the segment being hit is returned, along with the spot on the line from 0 to 1 if
@@ -481,9 +487,9 @@ namespace ShapeGame_Utils
                 ydif = y1 - fY0;
 
                 double Bsq = dist * dist;
-		        B = dist;
-		        double Asq = fXV0 * fXV0 + fYV0 * fYV0;
-		        A = Math.Sqrt(Asq);
+                B = dist;
+                double Asq = fXV0 * fXV0 + fYV0 * fYV0;
+                A = Math.Sqrt(Asq);
                 if (A > 0.000001)	// if moving much at all...
                 {
                     double cx = fX0 + fXV0;
@@ -586,7 +592,7 @@ namespace ShapeGame_Utils
             gameStartTime = DateTime.Now;
             scores.Clear();
         }
-        
+
         public void SetGameMode(GameMode mode)
         {
             gameMode = mode;
@@ -599,7 +605,7 @@ namespace ShapeGame_Utils
             gravityFactor = f;
             gravity = f * BaseGravity / targetFrameRate / Math.Sqrt(targetFrameRate) / Math.Sqrt((double)intraFrames);
             airFriction = (f == 0) ? 0.997 : Math.Exp(Math.Log(1.0 - (1.0 - baseAirFriction) / f) / intraFrames);
-            
+
             if (f == 0)  // Stop all movement as well!
             {
                 for (int i = 0; i < things.Count; i++)
@@ -725,8 +731,8 @@ namespace ShapeGame_Utils
                                             else if ((thing.state == ThingState.Bouncing) && (fMs > 100.0))
                                             {
                                                 hit |= HitType.Popped;
-                                                AddToScore( thing.touchedBy, 
-                                                            (pair.Key.joint1 == JointID.FootLeft || pair.Key.joint1 == JointID.FootRight) ? 10 : 5, 
+                                                AddToScore(thing.touchedBy,
+                                                            (pair.Key.joint1 == JointID.FootLeft || pair.Key.joint1 == JointID.FootRight) ? 10 : 5,
                                                             thing.center);
                                                 thing.touchedBy = playerId;
                                             }
@@ -925,14 +931,14 @@ namespace ShapeGame_Utils
                     tryType = alltypes[rnd.Next(alltypes.Length)];
                 } while ((polyTypes & tryType) == 0);
 
-                DropNewThing(tryType, shapeSize, Color.FromRgb(r, g, b));
+                DropNewThing(PolyType.Circle, shapeSize, Color.FromRgb(r, g, b));
             }
         }
 
         public void DrawFrame(UIElementCollection children)
         {
             frameCount++;
-
+            Random r = new Random();
             // Draw all shapes in the scene
             for (int i = 0; i < things.Count; i++)
             {
@@ -945,6 +951,28 @@ namespace ShapeGame_Utils
                                                                      (byte)(255 - (255 - thing.color.G) * factor),
                                                                      (byte)(255 - (255 - thing.color.B) * factor)));
                     thing.brushPulse = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+
+                    
+                    if (MainWindow.friendList.Count > 0)
+                    {
+
+
+                    if (thing.friend == null) {
+                        int random = r.Next(0, MainWindow.friendList.Count - 1);
+                        User friend = MainWindow.friendList[random];
+                        thing.friend = friend;
+                    }
+
+                    if (!brushes.ContainsKey(thing.friend.userid)) { 
+                        brushes.Add(thing.friend.userid,  new BitmapImage(new Uri(thing.friend.profilepicture.icon_medium.src, UriKind.Absolute)));
+                    }
+
+                    ImageBrush berriesBrush = new ImageBrush();
+                    berriesBrush.ImageSource =  brushes[thing.friend.userid];
+
+                    thing.brush = berriesBrush;
+
+                    }
                 }
 
                 if (thing.state == ThingState.Bouncing)  // Pulsate edges
@@ -974,7 +1002,7 @@ namespace ShapeGame_Utils
                 foreach (var score in scores)
                 {
                     Label label = MakeSimpleLabel(score.Value.ToString(),
-                        new Rect((0.02 + i * 0.6) * sceneRect.Width, 0.01 * sceneRect.Height, 
+                        new Rect((0.02 + i * 0.6) * sceneRect.Width, 0.01 * sceneRect.Height,
                                  0.4 * sceneRect.Width, 0.3 * sceneRect.Height),
                         new SolidColorBrush(Color.FromArgb(200, 255, 255, 255)));
                     label.FontSize = Math.Min(sceneRect.Width / 12, sceneRect.Height / 12);

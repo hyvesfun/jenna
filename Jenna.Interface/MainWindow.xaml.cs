@@ -35,6 +35,10 @@ using ShapeGame_Utils;
 // increase the resolution to get framerates above between 50fps with any
 // consistency.
 using System.Runtime.InteropServices;
+using Hyves.Api;
+using Hyves.Api.Model;
+using Hyves.Api.Service;
+using System.IO;
 public class Win32
 {
     [DllImport("Winmm.dll")]
@@ -58,24 +62,56 @@ namespace Jenna.Interface
         const double MinShapeSize = 12;
         const double MaxShapeSize = 90;
         const double DefaultDropRate = 2.5;
-        const double DefaultDropSize = 32.0;
+        const double DefaultDropSize = MaxShapeSize;
         const double DefaultDropGravity = 1.0;
+
+        public static List<User> friendList = new List<User>();
+        public static List<Album> albumList = new List<Album>();
 
         public MainWindow()
         {
             InitializeComponent();
             // Restore window state to that last used
-            Rect bounds = Properties.Settings.Default.PrevWinPosition;
-            if (bounds.Right != bounds.Left)
+            //Rect bounds = Properties.Settings.Default.PrevWinPosition;
+            //if (bounds.Right != bounds.Left)
+            //{
+            //    this.Top = bounds.Top;
+            //    this.Left = bounds.Left;
+            //    this.Height = bounds.Height;
+            //    this.Width = bounds.Width;
+            //}
+            // this.WindowState = (WindowState)Properties.Settings.Default.WindowState;
+
+
+            try
             {
-                this.Top = bounds.Top;
-                this.Left = bounds.Left;
-                this.Height = bounds.Height;
-                this.Width = bounds.Width;
+                HyvesApplication hyvesApplication = HyvesApplication.GetInstance();
+                hyvesApplication.LoginIn("anujahuja", "abcd1234", new HyvesServicesCallback<bool>(login));
+
             }
-            this.WindowState = (WindowState)Properties.Settings.Default.WindowState;
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.ToString());
+            }
         }
 
+        public void login(ServiceResult<bool> result) 
+        {
+
+            HyvesApplication hyvesApplication = HyvesApplication.GetInstance();
+            UserService.UsersGetByFriendsLastLogin(hyvesApplication.UserId, new HyvesServicesCallback<List<User>>(friends));
+            MediaService.AlbumsGetByUser(hyvesApplication.UserId, new HyvesServicesCallback<List<Album>>(albums));
+        }
+
+        public void albums(ServiceResult<List<Album>> result) 
+        {
+            albumList = result.Result;
+        }
+        public void friends(ServiceResult<List<User>> result) 
+        {
+           MainWindow.friendList  = result.Result;
+        }
         public class Player
         {
             public bool isAlive;
@@ -428,8 +464,9 @@ namespace Jenna.Interface
                 {
                     recognizer = new Recognizer();
                 }
-                catch
+                catch(Exception ex)
                 {
+                    MessageBox.Show(ex.Message);
                     recognizer = null;
                 }
                 if ((recognizer== null) || !recognizer.IsValid())
@@ -608,7 +645,63 @@ namespace Jenna.Interface
                         dropGravity = 0.25;
                     fallingThings.SetGravity(dropGravity);
                     break;
+                case Recognizer.Verbs.Up:
+                    try
+                    {
+                        nui.NuiCamera.ElevationAngle += 5;
+                    }
+                    catch { }
+                    break;
+                case Recognizer.Verbs.Down:
+                    try
+                    {
+                        nui.NuiCamera.ElevationAngle -= 5;
+                    }
+                    catch { }
+                    break;
+                case Recognizer.Verbs.Picture:
+                    takePicture();
+                    break;
             }
+        }
+
+        private void takePicture() 
+        {
+
+            nui.VideoFrameReady += new EventHandler<ImageFrameReadyEventArgs>(picture);
+
+        }
+
+        void picture(object sender, ImageFrameReadyEventArgs e)
+        {
+            nui.VideoFrameReady -= new EventHandler<ImageFrameReadyEventArgs>(picture);
+            // 32-bit per pixel, RGBA image
+            PlanarImage Image = e.ImageFrame.Image;
+            BitmapSource bs = BitmapSource.Create(
+                Image.Width, Image.Height, 96, 96, PixelFormats.Bgr32, null, Image.Bits, Image.Width * Image.BytesPerPixel);
+
+            string filePath = AppDomain.CurrentDomain.BaseDirectory + Guid.NewGuid().ToString() + ".bmp";
+          
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                BitmapEncoder encoder = new BmpBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(bs));
+                encoder.Save(fileStream);
+            }
+
+            foreach(Album album in albumList){
+                if(album.title.ToLower() == "kinect"){
+                    List<String> files = new List<string>();
+                    files.Add(filePath);
+                    MediaService.UploadFiles(files, album, new HyvesServicesCallback<HyvesBatchUploadRequest>(HyvesBatchUploadCallback));
+                }
+            }
+        }
+
+        private void HyvesBatchUploadCallback(ServiceResult<HyvesBatchUploadRequest> serviceResult)
+        {
+            FlyingText.NewFlyingText(screenRect.Width / 30, new Point(screenRect.Width / 2, screenRect.Height / 2), "Uploaded!");
+            
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

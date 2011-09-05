@@ -113,6 +113,12 @@
     <Content Include="Pop-5.wav" />
     <Content Include="Squeeze.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Hyves.Desktop.Api\Hyves.Api.csproj">
+      <Project>{3CDC049E-88CC-4096-AB96-2DE466FA378D}</Project>
+      <Name>Hyves.Api</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
