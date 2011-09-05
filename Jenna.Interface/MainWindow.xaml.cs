@@ -108,7 +108,10 @@ namespace Jenna.Interface
         }
         public void friends(ServiceResult<List<User>> result) 
         {
-           MainWindow.friendList  = result.Result;
+            if (!result.IsError)
+            {
+                MainWindow.friendList = result.Result;
+            }
         }
         public class Player
         {
